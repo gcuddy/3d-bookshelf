@@ -1,5 +1,6 @@
 ---
 import { getCollection, getEntry } from "astro:content";
+import Book from "../components/book.svelte";
 
 // Get all entries from a collection.
 // Requires the name of the collection as an argument.
@@ -19,19 +20,27 @@ import { Image } from "astro:assets";
   <body>
     <div class="p-8 flex">
       {
-        library.map(({ data, id }) => {
+        library.slice(0, 1).map(({ data, id }) => {
           return (
-            <div class="w-auto flex flex-col justify-center border p-1">
-              <h2>{data.title}</h2>
-              <Image
-                class="h-44 w-auto"
-                src={data.image}
-                alt={`Cover for ${data.title}`}
-              />
-            </div>
+            <>
+              <Book book={data}>
+                <Image
+                  client:idle
+                  class="absolute w-[calc(var(--width)*1px)] h-[calc(var(--height)*1px)] book-cover-front"
+                  src={data.image}
+                  alt={`Cover for ${data.title}`}
+                />
+              </Book>
+            </>
           );
         })
       }
     </div>
   </body>
 </html>
+
+<style>
+  .book-cover-front {
+    transform: rotateY(0deg) translateZ(50px);
+  }
+</style>

@@ -1,0 +1,40 @@
+{
+  "title": "Books of Earthsea",
+  "publishers": [
+    "Gollancz",
+    "ORION PUBLISHING GROUP"
+  ],
+  "authors": [
+    "Ursula K. Le Guin"
+  ],
+  "genre": [
+    "American literature"
+  ],
+  "isbn": [
+    "9781473223547"
+  ],
+  "pages": 1008,
+  "published": "2024-02-07T21:47:46.669Z",
+  "image": "./9781473223547.jpg",
+  "color": {
+    "value": [
+      49,
+      47,
+      51,
+      255
+    ],
+    "rgb": "rgb(49,47,51)",
+    "rgba": "rgba(49,47,51,1)",
+    "hex": "#312f33",
+    "hexa": "#312f33ff",
+    "isDark": true,
+    "isLight": false
+  },
+  "weight": 0,
+  "dimensions": {
+    "height": 24,
+    "width": 16.2,
+    "thickness": 6.6
+  },
+  "googleBooksId": "RphNtAEACAAJ"
+}

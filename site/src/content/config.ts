@@ -13,9 +13,9 @@ export const colorSchema = z.object({
 
 // all in cm
 export const dimensionsSchema = z.object({
-  width: z.number(),
-  height: z.number(),
-  thickness: z.number(),
+  width: z.number().optional(),
+  height: z.number().optional(),
+  thickness: z.number().optional(),
 });
 
 export type Color = z.infer<typeof colorSchema>;
@@ -27,12 +27,22 @@ export const BookSchema = z.object({
   authors: z.array(z.string()),
   genre: z.string().array().optional(),
   isbn: z.string().array(),
+  googleBooksId: z.string().optional(),
+  goodreadsId: z.string().optional(),
+  openLibraryId: z.string().optional(),
   pages: z.number().optional(),
   published: z.string(),
   image: z.string(),
   color: colorSchema,
   weight: z.number().nullish(),
-  dimensions: dimensionsSchema.optional(),
+  dimensions: z
+    .object({
+      width: z.number().optional(),
+      height: z.number().optional(),
+      thickness: z.number().optional(),
+    })
+    .optional(),
+  //   dimensions: dimensionsSchema.optional(),
 });
 
 export type Book = z.infer<typeof BookSchema>;

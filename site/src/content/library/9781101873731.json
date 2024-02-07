@@ -35,5 +35,11 @@
     "isDark": false,
     "isLight": true
   },
-  "weight": 0
+  "weight": 0,
+  "dimensions": {
+    "height": 21,
+    "width": 13.2,
+    "thickness": 2.5
+  },
+  "googleBooksId": "fzHJDwAAQBAJ"
 }

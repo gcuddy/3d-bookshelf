@@ -2,6 +2,10 @@ import dayjs from "dayjs";
 import { getAverageColor } from "fast-average-color-node";
 import type { Book } from "./site/src/content/config";
 import { getGoodreadsCover } from "./goodreads";
+import {
+  getGoogleBookVolumeIdFromIsbn,
+  getGoogleBookVolumeInfo,
+} from "./google-books";
 
 const isbn = Bun.argv[2];
 
@@ -24,9 +28,15 @@ const fullWork = await fetch(
 );
 const work = await fullWork.json();
 
-// const image = await fetch(
-//   `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`
-// );
+// let's go crazy - get google books info as well hehe
+
+const googleBooksId = await getGoogleBookVolumeIdFromIsbn(isbn);
+
+const volumeInfo = googleBooksId
+  ? await getGoogleBookVolumeInfo(googleBooksId)
+  : undefined;
+
+console.log({ volumeInfo });
 
 const imageSrc = await getGoodreadsCover(isbn);
 
@@ -60,12 +70,28 @@ const book: Book = {
       data.number_of_pages ??
         data.pagination ??
         work.number_of_pages ??
-        work.pagination
+        work.pagination ??
+        volumeInfo?.printedPageCount ??
+        volumeInfo?.pageCount
     ) ?? 0,
   published: date.toISOString(),
   image: `./${isbn}.jpg`,
   color,
   weight: data.weight ? Number(data.weight) : 0,
+  dimensions: volumeInfo?.dimensions
+    ? {
+        height: volumeInfo.dimensions.height
+          ? parseFloat(volumeInfo.dimensions.height)
+          : undefined,
+        width: volumeInfo.dimensions.width
+          ? parseFloat(volumeInfo.dimensions.width)
+          : undefined,
+        thickness: volumeInfo.dimensions.thickness
+          ? parseFloat(volumeInfo.dimensions.thickness)
+          : undefined,
+      }
+    : undefined,
+  googleBooksId,
 };
 
 await Bun.write(
