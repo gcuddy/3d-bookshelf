@@ -11,6 +11,13 @@ export const colorSchema = z.object({
   error: z.unknown().optional(),
 });
 
+// all in cm
+export const dimensionsSchema = z.object({
+  width: z.number(),
+  height: z.number(),
+  thickness: z.number(),
+});
+
 export type Color = z.infer<typeof colorSchema>;
 
 export const BookSchema = z.object({
@@ -25,6 +32,7 @@ export const BookSchema = z.object({
   image: z.string(),
   color: colorSchema,
   weight: z.number().nullish(),
+  dimensions: dimensionsSchema.optional(),
 });
 
 export type Book = z.infer<typeof BookSchema>;

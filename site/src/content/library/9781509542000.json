@@ -1,20 +1,37 @@
 {
   "title": "Ungovernable Society",
   "subtitle": "A Genealogy of Authoritarian Liberalism",
-  "publishers": ["Polity Press"],
-  "authors": ["Grégoire Chamayou"],
-  "genre": ["politique", "libéralisme", "capitalisme", "manipulation"],
-  "isbn": ["9781509542000"],
+  "publishers": [
+    "Polity Press"
+  ],
+  "authors": [
+    "Grégoire Chamayou"
+  ],
+  "genre": [
+    "politique",
+    "libéralisme",
+    "capitalisme",
+    "manipulation"
+  ],
+  "isbn": [
+    "9781509542000"
+  ],
   "pages": 350,
   "published": "2021-01-01T05:00:00.000Z",
   "image": "./9781509542000.jpg",
   "color": {
-    "value": [0, 0, 0, 0],
-    "rgb": "rgb(0,0,0)",
-    "rgba": "rgba(0,0,0,0)",
-    "hex": "#000000",
-    "hexa": "#00000000",
-    "isDark": true,
-    "isLight": false
-  }
+    "value": [
+      237,
+      138,
+      65,
+      255
+    ],
+    "rgb": "rgb(237,138,65)",
+    "rgba": "rgba(237,138,65,1)",
+    "hex": "#ed8a41",
+    "hexa": "#ed8a41ff",
+    "isDark": false,
+    "isLight": true
+  },
+  "weight": 0.659
 }

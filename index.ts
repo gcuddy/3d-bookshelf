@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import { getAverageColor } from "fast-average-color-node";
 import type { Book } from "./site/src/content/config";
+import { getGoodreadsCover } from "./goodreads";
 
 const isbn = Bun.argv[2];
 
@@ -22,14 +23,21 @@ const fullWork = await fetch(
   `https://openlibrary.org${data.works?.[0].key}.json`
 );
 const work = await fullWork.json();
-console.log({ work });
 
-const image = await fetch(
-  `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`
-);
+// const image = await fetch(
+//   `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`
+// );
+
+const imageSrc = await getGoodreadsCover(isbn);
+
+const image = imageSrc
+  ? await fetch(imageSrc)
+  : await fetch(`https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`);
+
 await Bun.write(`./site/src/content/library/${isbn}.jpg`, image);
 const color = await getAverageColor(`./site/src/content/library/${isbn}.jpg`);
 // save image to output folder with isbn as name
+
 // get colors from image
 // save colors to output folder with isbn as name
 

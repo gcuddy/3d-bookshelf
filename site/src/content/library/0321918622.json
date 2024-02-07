@@ -1,7 +1,11 @@
 {
   "title": "Computers as Theatre",
-  "publishers": ["Addison-Wesley Professional"],
-  "authors": ["Brenda Laurel"],
+  "publishers": [
+    "Addison-Wesley Professional"
+  ],
+  "authors": [
+    "Brenda Laurel"
+  ],
   "genre": [
     "Human-computer interaction",
     "User interfaces (Computer systems)",
@@ -14,12 +18,19 @@
     "User interfaces (computer systems)",
     "Computer software, development"
   ],
-  "isbn": ["9780321918628"],
+  "isbn": [
+    "9780321918628"
+  ],
   "pages": 272,
   "published": "2013-10-07T04:00:00.000Z",
   "image": "./0321918622.jpg",
   "color": {
-    "value": [207, 193, 174, 255],
+    "value": [
+      207,
+      193,
+      174,
+      255
+    ],
     "rgb": "rgb(207,193,174)",
     "rgba": "rgba(207,193,174,1)",
     "hex": "#cfc1ae",
@@ -27,5 +38,5 @@
     "isDark": false,
     "isLight": true
   },
-  "weight": null
+  "weight": 0
 }

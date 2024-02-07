@@ -1,8 +1,12 @@
 {
   "title": "This Life",
   "subtitle": "Secular Faith and Spiritual Freedom",
-  "publishers": ["Anchor"],
-  "authors": ["Martin Hägglund"],
+  "publishers": [
+    "Anchor"
+  ],
+  "authors": [
+    "Martin Hägglund"
+  ],
   "genre": [
     "Finite, the",
     "Meaning (philosophy)",
@@ -11,17 +15,25 @@
     "Faith",
     "Philosophy"
   ],
-  "isbn": ["9781101873731"],
+  "isbn": [
+    "9781101873731"
+  ],
   "pages": 464,
   "published": "2020-02-04T05:00:00.000Z",
   "image": "./9781101873731.jpg",
   "color": {
-    "value": [200, 189, 160, 255],
-    "rgb": "rgb(200,189,160)",
-    "rgba": "rgba(200,189,160,1)",
-    "hex": "#c8bda0",
-    "hexa": "#c8bda0ff",
+    "value": [
+      200,
+      188,
+      159,
+      255
+    ],
+    "rgb": "rgb(200,188,159)",
+    "rgba": "rgba(200,188,159,1)",
+    "hex": "#c8bc9f",
+    "hexa": "#c8bc9fff",
     "isDark": false,
     "isLight": true
-  }
+  },
+  "weight": 0
 }
