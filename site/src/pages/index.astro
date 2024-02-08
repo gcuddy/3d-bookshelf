@@ -18,7 +18,7 @@ import { Image } from "astro:assets";
     <title>Astro</title>
   </head>
   <body>
-    <div class="p-8 flex justify-center">
+    <div class="flex flex-col gap-10 items-center">
       {
         library.map(({ data, id }) => {
           return (
@@ -40,6 +40,6 @@ import { Image } from "astro:assets";
 
 <style>
   .book-cover-front {
-    transform: rotateY(0deg) translateZ(50px);
+    /* transform: rotateY(0deg) translateZ(calc(var(--thickness) * 1px)); */
   }
 </style>

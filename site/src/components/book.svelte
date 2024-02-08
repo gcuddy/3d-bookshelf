@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { spring } from "svelte/motion";
   import type { Book } from "../content/config";
   import { getDimensions } from "../utils";
 
@@ -6,13 +7,15 @@
   const { width, height, thickness } = getDimensions(book.dimensions);
 
   let isDragging = false;
-  let rotateX = 0;
-  let rotateY = 0;
+  const springInteractSettings = { stiffness: 0.066, damping: 0.25 };
+
+  let rotateX = spring(0, springInteractSettings);
+  let rotateY = spring(0, springInteractSettings);
 
   function interact(e: PointerEvent) {
     if (isDragging) {
-      rotateX += e.movementY;
-      rotateY += e.movementX;
+      $rotateX += e.movementY;
+      $rotateY += e.movementX;
       console.log(rotateX, rotateY);
     }
   }
@@ -43,7 +46,7 @@
     class="relative w-full h-full {isDragging
       ? 'cursor-grabbing'
       : 'cursor-grab'}"
-    style:transform={`translateZ( -50px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`}
+    style:transform={`rotateX(${$rotateX}deg) rotateY(${$rotateY}deg)`}
   >
     <slot />
 
@@ -88,39 +91,47 @@
 
   [data-book-right],
   [data-book-left] {
-    width: 100px;
+    width: calc(var(--thickness) * 1px);
     height: calc(var(--height) * 1px);
-    left: calc ((var(--width) * 1px) / 2);
+    /* left: calc ((var(--width) * 1px) / 2); */
   }
 
   [data-book-top],
   [data-book-bottom] {
     width: calc(var(--width) * 1px);
-    height: 100px;
-    top: 50px;
+    height: calc(var(--thickness) * 1px);
+    /* top: 50px; */
   }
 
   [data-book-right] {
-    transform: rotateY(90deg) translateZ(150px);
+    /* transform: rotateY(90deg) translateZ(150px); */
     background: gray;
+    transform: translateX(calc(var(--width) * 1px)) rotateY(90deg);
+    transform-origin: left;
   }
   [data-book-left] {
-    transform: rotateY(-90deg) translateZ(150px);
+    /* transform: rotateY(-90deg) translateZ(150px); */
     background: black;
+    transform: rotateY(90deg);
+    transform-origin: left;
   }
 
   [data-book-back] {
-    transform: rotateY(180deg) translateZ(50px);
+    transform: rotateY(180deg) translateZ(calc(var(--thickness) * 1px));
     background: red;
   }
 
   [data-book-top] {
-    transform: rotateX(90deg) translateZ(100px);
+    /* transform: rotateX(90deg) translateZ(100px); */
     background: blue;
+    transform: rotateX(-90deg);
+    transform-origin: top;
   }
 
   [data-book-bottom] {
-    transform: rotateX(-90deg) translateZ(100px);
+    /* transform: rotateX(-90deg) translateZ(100px); */
     background: green;
+    transform: translateY(calc(var(--height) * 1px)) rotateX(-90deg);
+    transform-origin: top;
   }
 </style>
