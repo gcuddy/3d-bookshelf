@@ -1,6 +1,7 @@
 ---
 import { getCollection, getEntry } from "astro:content";
 import Book from "../components/book.svelte";
+import Layout from "../layouts/layout.astro";
 
 // Get all entries from a collection.
 // Requires the name of the collection as an argument.
@@ -9,35 +10,24 @@ const library = await getCollection("library");
 import { Image } from "astro:assets";
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Astro</title>
-  </head>
-  <body>
-    <div class="flex flex-col gap-10 items-center">
-      {
-        library.map(({ data, id }) => {
-          return (
-            <>
-              <Book client:idle book={data}>
-                <Image
-                  class="absolute w-[calc(var(--width)*1px)] h-[calc(var(--height)*1px)] book-cover-front pointer-events-none shadow"
-                  src={data.image}
-                  alt={`Cover for ${data.title}`}
-                />
-              </Book>
-            </>
-          );
-        })
-      }
-    </div>
-  </body>
-</html>
-
+<Layout>
+  <div class="grid grid-cols-3 gap-10 items-center p-14 select-none h-screen">
+    {
+      library.map(({ data, id }) => {
+        return (
+          <Book {id} client:idle book={data} transition:persist>
+            <Image
+              class="absolute w-[calc(var(--width)*1px)] h-[calc(var(--height)*1px)] book-cover-front pointer-events-none shadow"
+              style={`view-transition-name:book-${id}`}
+              src={data.image}
+              alt={`Cover for ${data.title}`}
+            />
+          </Book>
+        );
+      })
+    }
+  </div>
+</Layout>
 <style>
   .book-cover-front {
     /* transform: rotateY(0deg) translateZ(calc(var(--thickness) * 1px)); */

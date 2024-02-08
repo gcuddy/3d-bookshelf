@@ -45,7 +45,9 @@ const image = imageSrc
   : await fetch(`https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`);
 
 await Bun.write(`./site/src/content/library/${isbn}.jpg`, image);
-const color = await getAverageColor(`./site/src/content/library/${isbn}.jpg`);
+const color = await getAverageColor(`./site/src/content/library/${isbn}.jpg`, {
+  // TODO: define things here getting sides
+});
 // save image to output folder with isbn as name
 
 // get colors from image

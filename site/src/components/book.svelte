@@ -1,9 +1,10 @@
 <script lang="ts">
   import { spring } from "svelte/motion";
   import type { Book } from "../content/config";
-  import { getDimensions } from "../utils";
+  import { getDimensions, round, clamp } from "../utils";
 
   export let book: Book;
+  export let id: string;
   const { width, height, thickness } = getDimensions(book.dimensions);
 
   let isDragging = false;
@@ -13,66 +14,147 @@
   let rotateY = spring(-25, springInteractSettings);
   let rotateZ = 0;
 
+  function makeGradientSteps(steps: number, start = "#fff", end = "#fff") {
+    const step = 100 / steps;
+    let gradient = "";
+    let color = "#fff";
+    for (let i = 0; i < steps; i++) {
+      if (i === 0) {
+        color = start;
+      } else if (i === steps - 1) {
+        color = end;
+      } else {
+        color = color === "#fff" ? "#f9f9f9" : "#fff";
+      }
+
+      if (i === steps - 1) {
+        gradient += `${color} 100%`;
+      } else {
+        gradient += `${color} ${i * step}%, `;
+      }
+      //   color = color === "#fff" ? "#f9f9f9" : "#fff";
+    }
+    console.log({ gradient });
+    return gradient;
+  }
+
+  const gradientStyle = (deg = 90) =>
+    `background: linear-gradient(${deg}deg, ${makeGradientSteps(
+      Math.min(60, Math.round((book.pages ?? 200) / 10)),
+      "#000",
+      "#000"
+    )})`;
+
+  const springGlare = spring(
+    {
+      x: 0,
+      y: 0,
+    },
+    springInteractSettings
+  );
+
+  let isMouseOver = {
+    front: false,
+    back: false,
+    spine: false,
+  };
+
   function interact(e: PointerEvent) {
+    console.log({ e });
+    const el = e.target as HTMLElement;
+    const rect = el.getBoundingClientRect();
+    const absolute = {
+      x: e.clientX - rect.left, // get mouse position from left
+      y: e.clientY - rect.top, // get mouse position from right
+    };
+    const percent = {
+      x: clamp(round((100 / rect.width) * absolute.x)),
+      y: clamp(round((100 / rect.height) * absolute.y)),
+    };
+    springGlare.set({
+      x: round(percent.x),
+      y: round(percent.y),
+    });
     if (isDragging) {
       $rotateX -= e.movementY;
       $rotateY += e.movementX;
       console.log(rotateX, rotateY);
+      shouldAllowClick = false;
     }
   }
 
-  let isRotating = true;
+  let isRotating = false;
+  let shouldAllowClick = true;
 </script>
 
 <svelte:document
   on:pointerup={() => {
     isDragging = false;
+    setTimeout(() => {
+      shouldAllowClick = true;
+    }, 175);
   }}
 />
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div
+<a
+  style:view-transition-name="b-{id}"
+  style:--pointer-x="{$springGlare.x}%"
+  style:--pointer-y="{$springGlare.y}%"
+  style:--pointer-from-center={clamp(
+    Math.sqrt(
+      ($springGlare.y - 50) * ($springGlare.y - 50) +
+        ($springGlare.x - 50) * ($springGlare.x - 50)
+    ) / 50,
+    0,
+    1
+  )}
+  href="/{id}"
+  on:click={(e) => {
+    if (!shouldAllowClick) {
+      e.preventDefault();
+    }
+    console.log({ shouldAllowClick, isDragging, isRotating, click: "click" });
+  }}
   on:mouseover={() => {
     console.log("mouseover");
     if (isRotating) {
       const el = document.querySelector("[data-book]");
-      const transform = window.getComputedStyle(el).transform;
-      console.log(transform);
+      if (el) {
+        const transform = window.getComputedStyle(el).transform;
+        var matrix = transform,
+          _rotateX = 0,
+          _rotateY = 0,
+          _rotateZ = 0;
 
-      // get current rotation
-      // const values = transform.split("(")[1].split(")")[0].split(", ");
-      var matrix = transform,
-        _rotateX = 0,
-        _rotateY = 0,
-        _rotateZ = 0;
+        if (matrix !== "none") {
+          // do some magic
+          var values = matrix.split("(")[1].split(")")[0].split(","),
+            pi = Math.PI,
+            sinB = parseFloat(values[8]),
+            b = Math.round((Math.asin(sinB) * 180) / pi),
+            cosB = Math.cos((b * pi) / 180),
+            matrixVal10 = parseFloat(values[9]),
+            a = Math.round((Math.asin(-matrixVal10 / cosB) * 180) / pi),
+            matrixVal1 = parseFloat(values[0]),
+            c = Math.round((Math.acos(matrixVal1 / cosB) * 180) / pi);
 
-      if (matrix !== "none") {
-        // do some magic
-        var values = matrix.split("(")[1].split(")")[0].split(","),
-          pi = Math.PI,
-          sinB = parseFloat(values[8]),
-          b = Math.round((Math.asin(sinB) * 180) / pi),
-          cosB = Math.cos((b * pi) / 180),
-          matrixVal10 = parseFloat(values[9]),
-          a = Math.round((Math.asin(-matrixVal10 / cosB) * 180) / pi),
-          matrixVal1 = parseFloat(values[0]),
-          c = Math.round((Math.acos(matrixVal1 / cosB) * 180) / pi);
+          _rotateX = a;
+          _rotateY = b;
+          _rotateZ = c;
+        }
 
-        _rotateX = a;
-        _rotateY = b;
-        _rotateZ = c;
+        rotateX.set(_rotateX, {
+          hard: true,
+        });
+        rotateY.set(_rotateY, {
+          hard: true,
+        });
+        rotateZ = _rotateZ;
+        // $rotateX = _rotateX;
+        // $rotateY = _rotateY;
       }
-
-      rotateX.set(_rotateX, {
-        hard: true,
-      });
-      rotateY.set(_rotateY, {
-        hard: true,
-      });
-      rotateZ = _rotateZ;
-      // $rotateX = _rotateX;
-      // $rotateY = _rotateY;
       isRotating = false;
     }
 
@@ -82,7 +164,8 @@
     console.log("mouseout");
     // isRotating = true;
   }}
-  on:pointerdown={() => {
+  on:pointerdown={(e) => {
+    e.preventDefault();
     console.log("pointerdown");
     isDragging = true;
   }}
@@ -103,31 +186,66 @@
       : 'cursor-grab'} {isRotating ? 'rotate' : ''}"
     style:transform={`rotateX(${$rotateX}deg) rotateY(${$rotateY}deg)`}
   >
-    <slot />
-
+    <div
+      class="w-full h-full relative"
+      on:mouseover={() => {
+        isMouseOver.front = true;
+        isMouseOver.back = false;
+        isMouseOver.spine = false;
+      }}
+      on:mouseout={() => {
+        isMouseOver.front = false;
+      }}
+    >
+      <slot />
+      <div data-glare />
+    </div>
     <!-- back side of front (shadow) -->
     <div data-book-front-shadow class="bg-black h-full w-full"></div>
 
     <!-- left -->
-    <div data-book-left>
+    <div
+      data-book-left
+      on:mouseover={() => {
+        isMouseOver.front = false;
+        isMouseOver.back = false;
+        isMouseOver.spine = true;
+      }}
+      on:mouseout={() => {
+        isMouseOver.spine = false;
+      }}
+    >
       <span class="book-spine">
         {book.title}
       </span>
+      <div data-glare />
     </div>
 
     <!-- right -->
-    <div data-book-right></div>
+    <div data-book-right style={gradientStyle(90)}></div>
 
     <!-- top -->
-    <div data-book-top></div>
+    <div data-book-top style={gradientStyle(0)}></div>
 
     <!-- bottom -->
-    <div data-book-bottom></div>
+    <div data-book-bottom style={gradientStyle(0)}></div>
 
     <!-- back -->
-    <div data-book-back></div>
+    <div
+      data-book-back
+      on:mouseover={() => {
+        isMouseOver.front = false;
+        isMouseOver.back = true;
+        isMouseOver.spine = false;
+      }}
+      on:mouseout={() => {
+        isMouseOver.back = false;
+      }}
+    >
+      <div data-glare />
+    </div>
   </div>
-</div>
+</a>
 
 <style>
   .book-container {
@@ -143,6 +261,25 @@
 
   [data-book] > * {
     position: absolute;
+  }
+
+  [data-glare] {
+    /* make sure the glare doesn't clip */
+    transform: translateZ(1.41px);
+    overflow: hidden;
+
+    background-image: radial-gradient(
+      farthest-corner circle at var(--pointer-x) var(--pointer-y),
+      hsla(0, 0%, 100%, 0.8) 10%,
+      hsla(0, 0%, 100%, 0.65) 20%,
+      hsla(0, 0%, 0%, 0.5) 90%
+    );
+
+    opacity: var(--card-opacity);
+    mix-blend-mode: overlay;
+
+    width: 100%;
+    height: 100%;
   }
 
   [data-book-front],
@@ -289,7 +426,7 @@
       transform: rotateY(0deg) rotateX(0deg);
     }
     100% {
-      transform: rotateY(360deg) rotate(90deg);
+      transform: rotateY(360deg) rotateX(20deg);
     }
   }
 </style>

@@ -1,0 +1,62 @@
+{
+  "title": "Concrete Mathematics",
+  "subtitle": "A Foundation for Computer Science",
+  "publishers": [
+    "TBS"
+  ],
+  "authors": [
+    "Graham / Knuth / Patashnik"
+  ],
+  "genre": [
+    "Computer science",
+    "Mathematics",
+    "Computer science, mathematics",
+    "Algorithmes",
+    "Informatique",
+    "Algorithme",
+    "Mathématiques pour informatique",
+    "Calcul formel",
+    "Programmation",
+    "Mathématiques",
+    "Computer science--mathematics",
+    "Matemáticas",
+    "Ciencias computacionales--matemáticas",
+    "Wiskundige methoden",
+    "Software",
+    "Informatique--mathématiques",
+    "Analysis",
+    "Zahlentheorie",
+    "Qa39.2 .g733 1994",
+    "510",
+    "54.10",
+    "Dat 542f",
+    "Mat 100f",
+    "Sk 110",
+    "St 110"
+  ],
+  "isbn": [
+    "9788131708415"
+  ],
+  "pages": 657,
+  "published": "1994-08-27T04:00:00.000Z",
+  "image": "./9788131708415.jpg",
+  "color": {
+    "value": [
+      170,
+      189,
+      196,
+      255
+    ],
+    "rgb": "rgb(170,189,196)",
+    "rgba": "rgba(170,189,196,1)",
+    "hex": "#aabdc4",
+    "hexa": "#aabdc4ff",
+    "isDark": false,
+    "isLight": true
+  },
+  "weight": 0,
+  "dimensions": {
+    "height": 24
+  },
+  "googleBooksId": "bRr2IvwTJaEC"
+}

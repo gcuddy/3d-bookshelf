@@ -9,8 +9,10 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@fontsource-variable/crimson-pro": "^5.0.17",
     "dayjs": "^1.11.10",
     "fast-average-color-node": "^3.0.0",
+    "nanostores": "^0.9.5",
     "node-html-parser": "^6.1.12"
   }
 }

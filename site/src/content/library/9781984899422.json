@@ -1,0 +1,45 @@
+{
+  "title": "Disability Visibility",
+  "subtitle": "First-Person Stories from the Twenty-First Century",
+  "publishers": [
+    "Vintage"
+  ],
+  "authors": [
+    "Alice Wong"
+  ],
+  "genre": [
+    "People with disabilities, biography",
+    "Sociology of disability",
+    "Sociology",
+    "People with disabilities",
+    "Biography",
+    "Social conditions"
+  ],
+  "isbn": [
+    "9781984899422"
+  ],
+  "pages": 336,
+  "published": "2020-06-30T04:00:00.000Z",
+  "image": "./9781984899422.jpg",
+  "color": {
+    "value": [
+      205,
+      189,
+      187,
+      255
+    ],
+    "rgb": "rgb(205,189,187)",
+    "rgba": "rgba(205,189,187,1)",
+    "hex": "#cdbdbb",
+    "hexa": "#cdbdbbff",
+    "isDark": false,
+    "isLight": true
+  },
+  "weight": 0,
+  "dimensions": {
+    "height": 21,
+    "width": 13.2,
+    "thickness": 1.8
+  },
+  "googleBooksId": "WProDwAAQBAJ"
+}

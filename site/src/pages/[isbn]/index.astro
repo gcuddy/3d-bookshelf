@@ -1,0 +1,63 @@
+---
+import { getEntry, getCollection } from "astro:content";
+import Book from "../../components/book.svelte";
+import { Image } from "astro:assets";
+import { formatDate } from "../../utils";
+import Layout from "../../layouts/layout.astro";
+export async function getStaticPaths() {
+  const library = await getCollection("library");
+  console.log({ library });
+  return library.map((book) => ({
+    params: { isbn: book.id },
+    props: { book },
+  }));
+}
+
+const { book } = Astro.props;
+
+const year = formatDate(book.data.published, "year");
+---
+
+<Layout>
+  <div
+    class="flex p-12 gap-4 h-screen justify-center"
+    style=`background-color:rgba(${book.data.color.value[0]}, ${book.data.color.value[1]}, ${book.data.color.value[2]}, 0.9)`
+  >
+    <Book transition:persist book={book.data} id={book.id} client:idle>
+      <Image
+        class="absolute w-[calc(var(--width)*1px)] h-[calc(var(--height)*1px)] book-cover-front pointer-events-none shadow"
+        style={`view-transition-name: book-${book.id}`}
+        src={book.data.image}
+        alt={`Cover for ${book.data.title}`}
+      />
+    </Book>
+    <div
+      class="flex flex-col gap-4"
+      style={`color: ${
+        book.data.color.isDark
+          ? "rgba(255, 255, 255, 0.9)"
+          : "rgba(0, 0, 0, 0.9)"
+      }`}
+    >
+      <div class="flex flex-col">
+        <h1
+          class="text-5xl font-serif font-medium"
+          style={`filter: drop-shadow(0 70px 90px ${book.data.color.rgb})`}
+        >
+          {book.data.title}
+        </h1>
+        {
+          !!book.data.subtitle && (
+            <span class="text-2xl font-serif font-normal italic">
+              {book.data.subtitle}
+            </span>
+          )
+        }
+      </div>
+
+      <span class="font-serif text-lg font-normal">
+        by <a class="underline" href="">{book.data.authors}</a>
+      </span>
+    </div>
+  </div>
+</Layout>
