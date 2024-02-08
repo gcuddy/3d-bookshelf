@@ -1,0 +1,38 @@
+{
+  "title": "Operating System Concepts",
+  "publishers": [
+    "Wiley Global Education US"
+  ],
+  "authors": [
+    "Abraham Silberschatz; Greg Gagne; Peter B. Galvin"
+  ],
+  "genre": [
+    "General",
+    "Professional, career & trade -> computer science -> operating systems"
+  ],
+  "isbn": [
+    "9781119320913"
+  ],
+  "pages": 1536,
+  "published": "2018-01-01T05:00:00.000Z",
+  "image": "./9781119320913.jpg",
+  "color": {
+    "value": [
+      245,
+      244,
+      243,
+      255
+    ],
+    "rgb": "rgb(245,244,243)",
+    "rgba": "rgba(245,244,243,1)",
+    "hex": "#f5f4f3",
+    "hexa": "#f5f4f3ff",
+    "isDark": false,
+    "isLight": true
+  },
+  "weight": 0,
+  "dimensions": {
+    "height": 26
+  },
+  "googleBooksId": "s-TltAEACAAJ"
+}

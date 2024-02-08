@@ -18,9 +18,9 @@ import { Image } from "astro:assets";
     <title>Astro</title>
   </head>
   <body>
-    <div class="p-8 flex">
+    <div class="p-8 flex justify-center">
       {
-        library.slice(0, 1).map(({ data, id }) => {
+        library.map(({ data, id }) => {
           return (
             <>
               <Book client:idle book={data}>
