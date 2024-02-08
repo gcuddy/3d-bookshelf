@@ -23,10 +23,9 @@ import { Image } from "astro:assets";
         library.slice(0, 1).map(({ data, id }) => {
           return (
             <>
-              <Book book={data}>
+              <Book client:idle book={data}>
                 <Image
-                  client:idle
-                  class="absolute w-[calc(var(--width)*1px)] h-[calc(var(--height)*1px)] book-cover-front"
+                  class="absolute w-[calc(var(--width)*1px)] h-[calc(var(--height)*1px)] book-cover-front pointer-events-none"
                   src={data.image}
                   alt={`Cover for ${data.title}`}
                 />

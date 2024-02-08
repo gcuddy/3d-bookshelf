@@ -4,17 +4,47 @@
 
   export let book: Book;
   const { width, height, thickness } = getDimensions(book.dimensions);
+
+  let isDragging = false;
+  let rotateX = 0;
+  let rotateY = 0;
+
+  function interact(e: PointerEvent) {
+    if (isDragging) {
+      rotateX += e.movementY;
+      rotateY += e.movementX;
+      console.log(rotateX, rotateY);
+    }
+  }
 </script>
 
+<svelte:document
+  on:pointerup={() => {
+    isDragging = false;
+  }}
+/>
+
 <div
+  on:pointerdown={() => {
+    console.log("pointerdown");
+    isDragging = true;
+  }}
+  on:pointermove={interact}
   class="book-container"
   style:--height={height}
   style:--width={width}
   style:--thickness={thickness}
+  style:--color={book.color.hex}
   style:width="{width}px"
   style:height="{height}px"
 >
-  <div data-book class="relative w-full h-full">
+  <div
+    data-book
+    class="relative w-full h-full {isDragging
+      ? 'cursor-grabbing'
+      : 'cursor-grab'}"
+    style:transform={`translateZ( -50px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`}
+  >
     <slot />
 
     <!-- left -->
@@ -44,7 +74,6 @@
     position: relative;
     width: 100%;
     height: 100%;
-    transform: translateZ(-50px);
   }
 
   [data-book] > * {
@@ -59,9 +88,9 @@
 
   [data-book-right],
   [data-book-left] {
-    width: calc(var(--thickness) * 1px);
+    width: 100px;
     height: calc(var(--height) * 1px);
-    left: 100px;
+    left: calc ((var(--width) * 1px) / 2);
   }
 
   [data-book-top],
