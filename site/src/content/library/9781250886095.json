@@ -1,0 +1,28 @@
+{
+  "title": "Legends and Lattes",
+  "subtitle": "A Novel of High Fantasy and Low Stakes",
+  "publishers": ["Doherty Associates, LLC, Tom"],
+  "authors": ["Travis Baldree"],
+  "genre": [
+    "Fiction, fantasy, general",
+    "nyt:trade-fiction-paperback=2022-11-27",
+    "New York Times bestseller"
+  ],
+  "isbn": ["9781250886095"],
+  "status": "to-read",
+  "description": "Worn out after decades of packing steel and raising hell, Viv the orc barbarian cashes out of the warrior’s life with one final score. A forgotten legend, a fabled artifact, and an unreasonable amount of hope lead her to the streets of Thune, where she plans to open the first coffee shop the city has ever seen.\r\n\r\nHowever, her dreams of a fresh start pulling shots instead of swinging swords are hardly a sure bet. Old frenemies and Thune’s shady underbelly may just upset her plans. To finally build something that will last, Viv will need some new partners and a different kind of resolve.\r\n\r\nA hot cup of fantasy slice-of-life with a dollop of romantic froth.",
+  "pages": 288,
+  "published": "2022-01-01T05:00:00.000Z",
+  "image": "./9781250886095.jpg",
+  "color": {
+    "value": [127, 103, 78, 255],
+    "rgb": "rgb(127,103,78)",
+    "rgba": "rgba(127,103,78,1)",
+    "hex": "#7f674e",
+    "hexa": "#7f674eff",
+    "isDark": true,
+    "isLight": false
+  },
+  "weight": 0,
+  "googleBooksId": "7lJzEAAAQBAJ"
+}

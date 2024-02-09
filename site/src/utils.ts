@@ -1,4 +1,4 @@
-import type { Book } from "./content/config";
+import type { Book } from "../../shared/schema";
 
 export function getDimensions(dimensions: Book["dimensions"]) {
   return {

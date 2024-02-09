@@ -1,0 +1,42 @@
+{
+  "title": "Computer Graphics from Scratch",
+  "publishers": [
+    "No Starch Press, Incorporated",
+    "No Starch Press"
+  ],
+  "authors": [
+    "Gabriel Gambetta"
+  ],
+  "genre": [
+    "Technology"
+  ],
+  "isbn": [
+    "9781718500761"
+  ],
+  "status": "to-read",
+  "description": "<b><i>Computer Graphics from Scratch</i> demystifies the algorithms used in modern graphics software and guides beginners through building photorealistic 3D renders.</b><br><br>Computer graphics programming books are often math-heavy and intimidating for newcomers. Not this one. <i>Computer Graphics from Scratch</i> takes a simpler approach by keeping the math to a minimum and focusing on only one aspect of computer graphics, 3D rendering.<br> <br>You’ll build two complete, fully functional renderers: a raytracer, which simulates rays of light as they bounce off objects, and a rasterizer, which converts 3D models into 2D pixels. As you progress you’ll learn how to create realistic reflections and shadows, and how to render a scene from any point of view.<br> <br>Pseudocode examples throughout make it easy to write your renderers in any language, and links to live JavaScript demos of each algorithm invite you to explore further on your own.<br>Learn how to:<br><li>Use perspective projection to draw 3D objects on a 2D plane</li><li>Simulate the way rays of light interact with surfaces</li><li>Add mirror-like reflections and cast shadows to objects</li><li>Render a scene from any camera position using clipping planes</li><li>Use flat, Gouraud, and Phong shading to mimic real surface lighting</li><li>Paint texture details onto basic shapes to create realistic-looking objects</li> <br>Whether you’re an aspiring graphics engineer or a novice programmer curious about how graphics algorithms work, Gabriel Gambetta’s simple, clear explanations will quickly put computer graphics concepts and rendering techniques within your reach. All you need is basic coding knowledge and high school math. <i>Computer Graphics from Scratch</i> will cover the rest.",
+  "pages": 180,
+  "published": "2020-01-01T05:00:00.000Z",
+  "image": "./9781718500761.jpg",
+  "color": {
+    "value": [
+      203,
+      196,
+      142,
+      255
+    ],
+    "rgb": "rgb(203,196,142)",
+    "rgba": "rgba(203,196,142,1)",
+    "hex": "#cbc48e",
+    "hexa": "#cbc48eff",
+    "isDark": false,
+    "isLight": true
+  },
+  "weight": 0,
+  "dimensions": {
+    "height": 23.4,
+    "width": 17.9,
+    "thickness": 1.5
+  },
+  "googleBooksId": "t0UqEAAAQBAJ"
+}

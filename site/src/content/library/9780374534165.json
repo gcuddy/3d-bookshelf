@@ -1,0 +1,53 @@
+{
+  "title": "My Struggle",
+  "subtitle": "Book 3",
+  "publishers": [
+    "Farrar Straus Giroux",
+    "Farrar, Straus and Giroux"
+  ],
+  "authors": [
+    "Karl Ove Knausgaard"
+  ],
+  "genre": [
+    "Fiction, family life",
+    "Fiction, psychological",
+    "Norway, fiction",
+    "Authors, fiction",
+    "Fiction",
+    "FICTION / Literary",
+    "nyt:trade-fiction-paperback=2014-07-06",
+    "New York Times bestseller",
+    "Fiction, biographical",
+    "Fiction, family life, general",
+    "Germanic literature"
+  ],
+  "isbn": [
+    "9780374534165"
+  ],
+  "status": "to-read",
+  "description": "<p><b>The third volume —the book that made Karl Ove Knausgaard a phenomenon in the United States—in the addictive <i>New York Times </i>bestselling series, </b><b><i>My Struggle.<br></i></b><br>A family of four—mother, father, and two boys—move to the south coast of Norway, to a new house on a newly developed site. It is the early 1970s and the family's trajectory is upwardly mobile: the future seems limitless. In painstaking, sometimes self-lacerating detail, Karl Ove Knausgaard paints a world familiar to anyone who can recall the intensity and novelty of childhood experience, one in which children and adults lead parallel lives that never meet. <br><br>Perhaps the most Proustian in the series, <i>My Struggle: Book 3</i> gives us Knausgaard's vivid, technicolor recollections of childhood, his emerging self-understanding, and the multilayered nature of time's passing, memory, and existence.</p>",
+  "pages": 464,
+  "published": "2015-04-28T04:00:00.000Z",
+  "image": "./9780374534165.jpg",
+  "color": {
+    "value": [
+      188,
+      183,
+      180,
+      255
+    ],
+    "rgb": "rgb(188,183,180)",
+    "rgba": "rgba(188,183,180,1)",
+    "hex": "#bcb7b4",
+    "hexa": "#bcb7b4ff",
+    "isDark": false,
+    "isLight": true
+  },
+  "weight": 0,
+  "dimensions": {
+    "height": 21,
+    "width": 14,
+    "thickness": 3
+  },
+  "googleBooksId": "VTOeCQAAQBAJ"
+}

@@ -1,0 +1,40 @@
+{
+  "title": "Seeing That Frees",
+  "publishers": [
+    "Troubador Publishing Ltd"
+  ],
+  "authors": [
+    "Robert Burbea"
+  ],
+  "genre": [
+    "Buddhism"
+  ],
+  "isbn": [
+    "9780992848910"
+  ],
+  "status": "to-read",
+  "pages": 464,
+  "published": "2014-10-10T04:00:00.000Z",
+  "image": "./9780992848910.jpg",
+  "color": {
+    "value": [
+      138,
+      179,
+      196,
+      255
+    ],
+    "rgb": "rgb(138,179,196)",
+    "rgba": "rgba(138,179,196,1)",
+    "hex": "#8ab3c4",
+    "hexa": "#8ab3c4ff",
+    "isDark": false,
+    "isLight": true
+  },
+  "weight": 0,
+  "dimensions": {
+    "height": 23.4,
+    "width": 15.6,
+    "thickness": 2.4
+  },
+  "googleBooksId": "kwntoQEACAAJ"
+}

@@ -2,17 +2,40 @@
   import { spring } from "svelte/motion";
   import type { Book } from "../content/config";
   import { getDimensions, round, clamp } from "../utils";
-
+  import { activeCard } from "../stores";
   export let book: Book;
   export let id: string;
   const { width, height, thickness } = getDimensions(book.dimensions);
 
+  $: isActive = $activeCard === id;
+  $: console.log(`${id} is active: ${isActive}`);
   let isDragging = false;
   const springInteractSettings = { stiffness: 0.066, damping: 0.25 };
 
   let rotateX = spring(10, springInteractSettings);
   let rotateY = spring(-25, springInteractSettings);
   let rotateZ = 0;
+
+  //   $: if (!isActive) {
+  //     rotateX.set(10);
+  //     rotateY.set(-25);
+  //   }
+
+  function outsideClick(node: HTMLElement, cb: () => void) {
+    const handleClick = (e: MouseEvent) => {
+      if (node && !node.contains(e.target as Node)) {
+        cb();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClick);
+
+    return {
+      destroy() {
+        document.removeEventListener("mousedown", handleClick);
+      },
+    };
+  }
 
   function makeGradientSteps(steps: number, start = "#fff", end = "#fff") {
     const step = 100 / steps;
@@ -53,6 +76,14 @@
     springInteractSettings
   );
 
+  const hoverSpring = spring(
+    {
+      x: 0,
+      y: 0,
+    },
+    springInteractSettings
+  );
+
   let isMouseOver = {
     front: false,
     back: false,
@@ -60,7 +91,6 @@
   };
 
   function interact(e: PointerEvent) {
-    console.log({ e });
     const el = e.target as HTMLElement;
     const rect = el.getBoundingClientRect();
     const absolute = {
@@ -71,15 +101,27 @@
       x: clamp(round((100 / rect.width) * absolute.x)),
       y: clamp(round((100 / rect.height) * absolute.y)),
     };
+    const center = {
+      x: percent.x - 50,
+      y: percent.y - 50,
+    };
     springGlare.set({
       x: round(percent.x),
       y: round(percent.y),
     });
+    hoverSpring.set({
+      x: round(-(center.x / 2)),
+      y: round(center.y / 2),
+    });
+
     if (isDragging) {
       $rotateX -= e.movementY;
       $rotateY += e.movementX;
       console.log(rotateX, rotateY);
       shouldAllowClick = false;
+    } else if (isMouseOver.front && !isActive) {
+      $rotateX = round(-(center.x / 2));
+      $rotateY = round(center.y / 2);
     }
   }
 
@@ -99,6 +141,9 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <a
+  use:outsideClick={() => {
+    isActive = false;
+  }}
   style:view-transition-name="b-{id}"
   style:--pointer-x="{$springGlare.x}%"
   style:--pointer-y="{$springGlare.y}%"
@@ -112,13 +157,15 @@
   )}
   href="/{id}"
   on:click={(e) => {
+    e.preventDefault();
     if (!shouldAllowClick) {
-      e.preventDefault();
     }
     console.log({ shouldAllowClick, isDragging, isRotating, click: "click" });
   }}
   on:mouseover={() => {
     console.log("mouseover");
+    // activeCard.set(id);
+    console.log({ $activeCard });
     if (isRotating) {
       const el = document.querySelector("[data-book]");
       if (el) {
@@ -166,6 +213,7 @@
   }}
   on:pointerdown={(e) => {
     e.preventDefault();
+    activeCard.set(id);
     console.log("pointerdown");
     isDragging = true;
   }}
