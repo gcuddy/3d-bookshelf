@@ -39,6 +39,9 @@
   } else {
     scale.set(1);
     translate.set({ x: 0, y: 0 });
+    // return x rotation to random number around 10
+    $rotateX = Math.random() * 10;
+    $rotateY = Math.random() * 25 - 25;
     frontRotation.set(0);
   }
 
@@ -102,14 +105,6 @@
     springInteractSettings
   );
 
-  const hoverSpring = spring(
-    {
-      x: 0,
-      y: 0,
-    },
-    springInteractSettings
-  );
-
   let thisBook: HTMLDivElement;
 
   let isMouseOver = {
@@ -133,14 +128,6 @@
       x: percent.x - 50,
       y: percent.y - 50,
     };
-    springGlare.set({
-      x: round(percent.x),
-      y: round(percent.y),
-    });
-    hoverSpring.set({
-      x: round(-(center.x / 2)),
-      y: round(center.y / 2),
-    });
 
     if (isDragging) {
       $rotateX -= e.movementY;
@@ -151,6 +138,11 @@
       $rotateX = round(-(center.x / 2));
       $rotateY = round(center.y / 2);
     }
+
+    springGlare.set({
+      x: round(percent.x),
+      y: round(percent.y),
+    });
   }
 
   let isRotating = false;
@@ -164,13 +156,13 @@
     const desiredX = view.clientWidth / 2;
     const desiredY = view.clientHeight / 2;
 
-    const deltaX = desiredX - rect.x - rect.width / 2;
+    const deltaX = desiredX - rect.x;
 
     const deltaY = desiredY - rect.y - rect.height / 2;
 
     const delta = {
-      x: round(deltaX / scale),
-      y: round(deltaY / scale),
+      x: round(deltaX),
+      y: round(deltaY),
     };
 
     translate.set(delta);
@@ -307,7 +299,9 @@
     style:transform={`rotateX(${$rotateX}deg) rotateY(${$rotateY}deg) scale(var(--scale))`}
   >
     <div
-      class="w-full h-full relative origin-left"
+      class="w-full h-full relative origin-left {$selectedCard === id
+        ? 'brightness-90'
+        : ''}"
       style:transform={`rotateY(${$frontRotation}deg)`}
       on:mouseover={() => {
         isMouseOver.front = true;
