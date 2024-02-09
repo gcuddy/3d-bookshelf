@@ -5,6 +5,8 @@
   import { fade } from "svelte/transition";
   import BookInfo from "./book-info.svelte";
   import type { Book } from "../../../shared/schema";
+  import { navigate } from "astro:transitions/client";
+  import PaperFilter from "./paper-filter.svelte";
   export let book: Book;
   export let id: string;
   const { width, height, thickness } = getDimensions(book.dimensions);
@@ -227,6 +229,9 @@
     1
   )}
   href="/{id}"
+  on:dblclick={() => {
+    navigate(`/${id}`);
+  }}
   on:click={(e) => {
     e.preventDefault();
 
@@ -291,7 +296,7 @@
     isDragging = true;
   }}
   on:pointermove={interact}
-  class="book-container will-change-transform"
+  class="book-container will-change-auto drop-shadow-lg"
   class:selected={$selectedCard === id}
   style:--height={height}
   style:--width={width}
@@ -307,7 +312,7 @@
   <div
     bind:this={thisBook}
     data-book
-    class="relative w-full h-full shadow-2xl {isDragging
+    class="relative w-full h-full {isDragging
       ? 'cursor-grabbing'
       : 'cursor-grab'} {isRotating ? 'rotate' : ''}"
     style:transform={`rotateX(${$rotateX}deg) rotateY(${$rotateY}deg) scale(var(--scale))`}
@@ -327,6 +332,7 @@
       }}
     >
       <slot />
+      <PaperFilter class="opacity-20" />
       <div data-glare />
     </div>
     <!-- back side of front (shadow) -->
@@ -373,6 +379,7 @@
         isMouseOver.spine = false;
       }}
     >
+      <PaperFilter class="opacity-40" />
       <span class="book-spine">
         {book.title}
       </span>
@@ -400,6 +407,7 @@
         isMouseOver.back = false;
       }}
     >
+      <PaperFilter class="opacity-40" />
       <div data-glare />
     </div>
   </div>
