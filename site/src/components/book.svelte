@@ -1,10 +1,10 @@
 <script lang="ts">
   import { spring, tweened } from "svelte/motion";
-  import type { Book } from "../content/config";
   import { getDimensions, round, clamp } from "../utils";
   import { activeCard, selectedCard } from "../stores";
   import { fade } from "svelte/transition";
   import BookInfo from "./book-info.svelte";
+  import type { Book } from "../../../shared/schema";
   export let book: Book;
   export let id: string;
   const { width, height, thickness } = getDimensions(book.dimensions);
@@ -185,6 +185,15 @@
     }, 175);
   }}
 />
+
+<!-- overlay -->
+{#if $selectedCard === id}
+  <div
+    transition:fade
+    style:background-color="rgba({book.color.value.slice(0, 3).join(",")}, 0.5)"
+    class="fixed inset-0 bg-opacity-50 z-50 backdrop-blur-sm"
+  ></div>
+{/if}
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
