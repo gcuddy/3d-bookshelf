@@ -1,8 +1,10 @@
 <script lang="ts">
-  import { spring } from "svelte/motion";
+  import { spring, tweened } from "svelte/motion";
   import type { Book } from "../content/config";
   import { getDimensions, round, clamp } from "../utils";
-  import { activeCard } from "../stores";
+  import { activeCard, selectedCard } from "../stores";
+  import { fade } from "svelte/transition";
+  import BookInfo from "./book-info.svelte";
   export let book: Book;
   export let id: string;
   const { width, height, thickness } = getDimensions(book.dimensions);
@@ -14,17 +16,41 @@
 
   let rotateX = spring(10, springInteractSettings);
   let rotateY = spring(-25, springInteractSettings);
+  let scale = spring(1, {
+    stiffness: springInteractSettings.stiffness * 0.5,
+    damping: springInteractSettings.damping * 0.5,
+  });
+  let translate = spring({ x: 0, y: 0 }, springInteractSettings);
   let rotateZ = 0;
+
+  let frontRotation = tweened(0, {
+    delay: 250,
+    duration: 500,
+  });
+
+  $: if ($selectedCard === id) {
+    const rect = thisBook.getBoundingClientRect();
+    let scaleW = (window.innerWidth / rect.width) * 0.9;
+    let scaleH = (window.innerHeight / rect.height) * 0.9;
+    const newScale = Math.min(scaleW, scaleH, 2.1);
+    scale.set(newScale);
+    setLeft(newScale);
+    frontRotation.set(-170);
+  } else {
+    scale.set(1);
+    translate.set({ x: 0, y: 0 });
+    frontRotation.set(0);
+  }
 
   //   $: if (!isActive) {
   //     rotateX.set(10);
   //     rotateY.set(-25);
   //   }
 
-  function outsideClick(node: HTMLElement, cb: () => void) {
+  function outsideClick(node: HTMLElement, cb: (e: MouseEvent) => void) {
     const handleClick = (e: MouseEvent) => {
       if (node && !node.contains(e.target as Node)) {
-        cb();
+        cb(e);
       }
     };
 
@@ -84,6 +110,8 @@
     springInteractSettings
   );
 
+  let thisBook: HTMLDivElement;
+
   let isMouseOver = {
     front: false,
     back: false,
@@ -127,6 +155,26 @@
 
   let isRotating = false;
   let shouldAllowClick = true;
+
+  function setLeft(scale = 1) {
+    const rect = thisBook.getBoundingClientRect();
+    const view = document.documentElement;
+
+    // desired x is one third of the view width
+    const desiredX = view.clientWidth / 2;
+    const desiredY = view.clientHeight / 2;
+
+    const deltaX = desiredX - rect.x - rect.width / 2;
+
+    const deltaY = desiredY - rect.y - rect.height / 2;
+
+    const delta = {
+      x: round(deltaX / scale),
+      y: round(deltaY / scale),
+    };
+
+    translate.set(delta);
+  }
 </script>
 
 <svelte:document
@@ -141,8 +189,16 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <a
-  use:outsideClick={() => {
+  use:outsideClick={(e) => {
     isActive = false;
+    if (
+      $selectedCard === id &&
+      e.target &&
+      e.target instanceof HTMLElement &&
+      !(e.target instanceof HTMLAnchorElement || e.target.closest("a"))
+    ) {
+      selectedCard.set(null);
+    }
   }}
   style:view-transition-name="b-{id}"
   style:--pointer-x="{$springGlare.x}%"
@@ -158,6 +214,8 @@
   href="/{id}"
   on:click={(e) => {
     e.preventDefault();
+
+    selectedCard.set(id);
     if (!shouldAllowClick) {
     }
     console.log({ shouldAllowClick, isDragging, isRotating, click: "click" });
@@ -218,24 +276,30 @@
     isDragging = true;
   }}
   on:pointermove={interact}
-  class="book-container"
+  class="book-container will-change-transform"
+  class:selected={$selectedCard === id}
   style:--height={height}
   style:--width={width}
   style:--thickness={thickness}
   style:--color={book.color.hex}
+  style:--scale={$scale}
   style:--textColor={book.color.isDark ? "white" : "black"}
   style:width="{width}px"
   style:height="{height}px"
+  style:perspective="{$selectedCard === id ? 600 * $scale : 600}px"
+  style:transform={`translateX(${$translate.x}px) translateY(${$translate.y}px) translateZ(0)`}
 >
   <div
+    bind:this={thisBook}
     data-book
-    class="relative w-full h-full {isDragging
+    class="relative w-full h-full shadow-2xl {isDragging
       ? 'cursor-grabbing'
       : 'cursor-grab'} {isRotating ? 'rotate' : ''}"
-    style:transform={`rotateX(${$rotateX}deg) rotateY(${$rotateY}deg)`}
+    style:transform={`rotateX(${$rotateX}deg) rotateY(${$rotateY}deg) scale(var(--scale))`}
   >
     <div
-      class="w-full h-full relative"
+      class="w-full h-full relative origin-left"
+      style:transform={`rotateY(${$frontRotation}deg)`}
       on:mouseover={() => {
         isMouseOver.front = true;
         isMouseOver.back = false;
@@ -250,6 +314,35 @@
     </div>
     <!-- back side of front (shadow) -->
     <div data-book-front-shadow class="bg-black h-full w-full"></div>
+    {#if $selectedCard === id}
+      <div
+        in:fade={{
+          delay: 250,
+          duration: 0,
+        }}
+        out:fade={{
+          delay: 2000,
+        }}
+        data-book-first-page
+        class="bg-white -z-[1] w-[calc((var(--width) - 2) * 1px) border border-[#f9f9f9] h-[calc((var(--height) - 2) * 1px)] top-[1px] left-[1px] absolute overflow-auto"
+      >
+        <!-- <span class="font-serif text-2xl text-center">{book.title}</span> -->
+        <div
+          transition:fade|global={{
+            delay: 600,
+          }}
+          class="flex flex-col py-4 items-center origin-top"
+          style:transform="scale({1 / $scale})"
+        >
+          <BookInfo
+            book={{
+              data: book,
+              id,
+            }}
+          />
+        </div>
+      </div>
+    {/if}
 
     <!-- left -->
     <div
@@ -296,10 +389,6 @@
 </a>
 
 <style>
-  .book-container {
-    perspective: 600px;
-  }
-
   [data-book] {
     transform-style: preserve-3d;
     position: relative;
@@ -323,7 +412,7 @@
       hsla(0, 0%, 0%, 0.5) 90%
     );
 
-    opacity: var(--card-opacity);
+    opacity: 0.5;
     mix-blend-mode: overlay;
 
     width: 100%;
@@ -449,6 +538,12 @@
     backface-visibility: hidden;
   }
 
+  [data-book-first-page] {
+    height: calc((var(--height) - 2) * 1px);
+    width: calc((var(--width) - 2) * 1px);
+    background: white;
+  }
+
   .book-spine {
     position: absolute;
     transform-origin: 0 0;
@@ -467,6 +562,10 @@
 
   .rotate {
     animation: rotate 30s linear infinite;
+  }
+
+  .selected {
+    z-index: 100;
   }
 
   @keyframes rotate {
