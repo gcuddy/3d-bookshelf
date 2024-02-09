@@ -28,6 +28,11 @@
     duration: 500,
   });
 
+  const center = () => {
+    $rotateX = Math.random() * 10;
+    $rotateY = Math.random() * 25 - 25;
+  };
+
   $: if ($selectedCard === id) {
     const rect = thisBook.getBoundingClientRect();
     let scaleW = (window.innerWidth / rect.width) * 0.9;
@@ -36,12 +41,12 @@
     scale.set(newScale);
     setLeft(newScale);
     frontRotation.set(-170);
+    center();
   } else {
     scale.set(1);
     translate.set({ x: 0, y: 0 });
     // return x rotation to random number around 10
-    $rotateX = Math.random() * 10;
-    $rotateY = Math.random() * 25 - 25;
+    center();
     frontRotation.set(0);
   }
 
@@ -168,6 +173,15 @@
     translate.set(delta);
   }
 </script>
+
+<svelte:window
+  on:resize={() => {
+    console.log("resize");
+    if ($selectedCard === id) {
+      setLeft();
+    }
+  }}
+/>
 
 <svelte:document
   on:pointerup={() => {
@@ -334,9 +348,9 @@
           transition:fade|global={{
             delay: 600,
           }}
-          class="flex flex-col py-4 items-center origin-top"
-          style:transform="scale({1 / $scale})"
+          class="flex flex-col px-2 py-4 items-center origin-top"
         >
+          <!-- style:transform="scale({1 / $scale})" -->
           <BookInfo
             book={{
               data: book,
