@@ -1,20 +1,27 @@
 <script lang="ts">
   import { spring, tweened } from "svelte/motion";
   import { getDimensions, round, clamp } from "../utils";
-  import { activeCard, selectedCard } from "../stores";
+  import { activeCard, selectedCard, spineMode } from "../stores";
   import { fade } from "svelte/transition";
   import BookInfo from "./book-info.svelte";
   import type { Book } from "../../../shared/schema";
   import { navigate } from "astro:transitions/client";
   import PaperFilter from "./paper-filter.svelte";
+  import { onDestroy } from "svelte";
+  import { writable } from "svelte/store";
   export let book: Book;
   export let id: string;
   const { width, height, thickness } = getDimensions(book.dimensions);
 
+  let _width = writable(width);
+
   $: isActive = $activeCard === id;
   $: console.log(`${id} is active: ${isActive}`);
   let isDragging = false;
-  const springInteractSettings = { stiffness: 0.066, damping: 0.25 };
+  const springInteractSettings = {
+    stiffness: 0.066,
+    damping: clamp(book.pages ?? 250 / 1000, 0.2, 0.8),
+  };
 
   let rotateX = spring(10, springInteractSettings);
   let rotateY = spring(-25, springInteractSettings);
@@ -24,6 +31,35 @@
   });
   let translate = spring({ x: 0, y: 0 }, springInteractSettings);
   let rotateZ = 0;
+
+  let lastRotateX = 10;
+  let lastRotateY = -25;
+
+  const unsubscribeSpineMode = spineMode.subscribe((val) => {
+    console.log("spinemode", { val });
+    if (val) {
+      lastRotateY = $rotateY;
+      //   rotateY.set(Math.random() * 0.5 + 89.75);
+      rotateY.set(90);
+      rotateX.set(0);
+
+      $_width = thickness;
+
+      //   set translate x to half width of spine
+      $translate.x = thickness / 2;
+    } else {
+      rotateY.set(-25);
+      $translate.x = 0;
+      $_width = width;
+    }
+  });
+  //   $: if ($spineMode) {
+  //     lastRotateY = $rotateY;
+  //     // get random degree between 88 and 92
+  //     rotateY.set(Math.random() * 4 + 88);
+  //   } else {
+  //     rotateY.set(-25);
+  //   }
 
   let frontRotation = tweened(0, {
     delay: 250,
@@ -174,6 +210,10 @@
 
     translate.set(delta);
   }
+
+  onDestroy(() => {
+    unsubscribeSpineMode();
+  });
 </script>
 
 <svelte:window
@@ -303,22 +343,24 @@
   style:--thickness={thickness}
   style:--color={book.color.hex}
   style:--scale={$scale}
+  style:width={`${$_width}px`}
   style:--textColor={book.color.isDark ? "white" : "black"}
-  style:width="{width}px"
   style:height="{height}px"
   style:perspective="{$selectedCard === id ? 600 * $scale : 600}px"
   style:transform={`translateX(${$translate.x}px) translateY(${$translate.y}px) translateZ(0)`}
 >
+  <!-- style:width={`${width}px`} -->
   <div
     bind:this={thisBook}
     data-book
-    class="relative w-full h-full {isDragging
+    class="relative h-full w-full {isDragging
       ? 'cursor-grabbing'
       : 'cursor-grab'} {isRotating ? 'rotate' : ''}"
     style:transform={`rotateX(${$rotateX}deg) rotateY(${$rotateY}deg) scale(var(--scale))`}
   >
     <div
-      class="w-full h-full relative origin-left {$selectedCard === id
+      style:width={`${width}px`}
+      class="h-full relative origin-left {$selectedCard === id
         ? 'brightness-90'
         : ''}"
       style:transform={`rotateY(${$frontRotation}deg)`}

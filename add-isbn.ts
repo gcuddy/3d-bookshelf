@@ -17,8 +17,12 @@ export async function addBookViaIsbn(
 
   const date = dayjs(data.publish_date);
 
+  console.log("data", data.works[0].key);
+
+  const key = data.works[0].key;
+
   const fullWork = await fetch(
-    `https://openlibrary.org${data.works?.[0].key}.json`
+    `https://openlibrary.org${data.works[0].key}.json`
   );
   const work = await fullWork.json();
 
@@ -47,18 +51,23 @@ export async function addBookViaIsbn(
   // get colors from image
   // save colors to output folder with isbn as name
 
-  // for now just one author
-  const author = await fetch(
-    `https://openlibrary.org${data.authors?.[0].key}.json`
-  );
+  console.log("data authors", data.authors);
 
-  const authorData = await author.json();
+  // for now just one author
+  const authorKey = data.authors?.[0]?.key;
+
+  let authorData = {};
+  if (authorKey) {
+    const author = await fetch(`https://openlibrary.org${authorKey}.json`);
+
+    authorData = await author.json();
+  }
 
   const book: Book = {
     title: data.title,
     subtitle: data.subtitle,
     publishers: data.publishers,
-    authors: [authorData.name],
+    authors: [authorData.name ?? ""],
     genre: work.subjects,
     isbn: data.isbn_13 || data.isbn_10,
     status,

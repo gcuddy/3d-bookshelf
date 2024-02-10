@@ -8,10 +8,12 @@ import Layout from "../layouts/layout.astro";
 // Example: retrieve `src/content/blog/**`
 const library = await getCollection("library");
 import { Image } from "astro:assets";
+import BooksControls from "../components/books-controls.svelte";
 ---
 
 <Layout>
-  <div class="flex flex-wrap gap-24 items-center p-14 select-none h-screen">
+  <BooksControls client:idle />
+  <div class="flex flex-wrap min-content gap-4 h-min items-baseline p-14 select-none">
     {
       library.map(({ data, id }) => {
         return (
