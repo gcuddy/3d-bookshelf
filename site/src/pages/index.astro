@@ -9,26 +9,60 @@ import Layout from "../layouts/layout.astro";
 const library = await getCollection("library");
 import { Image } from "astro:assets";
 import BooksControls from "../components/books-controls.svelte";
+import BookShelf from "../components/bookshelf.astro";
 ---
 
+<script>
+  const books = () => document.querySelectorAll<HTMLElement>(".book-container");
+
+  console.log({ books });
+
+  const viewController =
+    document.querySelector<HTMLElement>("[data-view-type]");
+
+  if (viewController) {
+    const mutationObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === "data-view-type") {
+          const viewType = viewController?.dataset.viewType;
+          for (const book of books()) {
+            console.log("top", book.offsetTop, book.offsetHeight);
+          }
+          //   books.forEach((book) => {
+          //     book.dataset.viewType = viewType;
+          //   });
+        }
+      });
+    });
+
+    mutationObserver.observe(viewController, {
+      attributes: true,
+    });
+  }
+</script>
+
 <Layout>
-  <BooksControls client:idle />
-  <div class="flex flex-wrap min-content gap-4 h-min items-baseline p-14 select-none">
-    {
-      library.map(({ data, id }) => {
-        return (
-          <Book {id} client:idle book={data} transition:persist>
-            <Image
-              class="absolute w-[calc(var(--width)*1px)] h-[calc(var(--height)*1px)] book-cover-front pointer-events-none shadow"
-              style={`view-transition-name:book-${id}`}
-              src={data.image}
-              alt={`Cover for ${data.title}`}
-            />
-          </Book>
-        );
-      })
-    }
-  </div>
+  <BookShelf>
+    <BooksControls client:idle />
+    <div
+      class="flex flex-wrap min-content gap-4 h-min items-baseline p-14 select-none"
+    >
+      {
+        library.map(({ data, id }) => {
+          return (
+            <Book {id} client:idle book={data} transition:persist>
+              <Image
+                class="absolute w-[calc(var(--width)*1px)] h-[calc(var(--height)*1px)] book-cover-front pointer-events-none shadow"
+                style={`view-transition-name:book-${id}`}
+                src={data.image}
+                alt={`Cover for ${data.title}`}
+              />
+            </Book>
+          );
+        })
+      }
+    </div>
+  </BookShelf>
 </Layout>
 <style>
   .book-cover-front {

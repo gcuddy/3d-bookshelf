@@ -2,6 +2,7 @@
   import { spineMode } from "../stores";
 </script>
 
+<div data-view-type={$spineMode ? 'spines' : 'grid'}>
 <label>
   Spine Mode
   {$spineMode}
@@ -25,3 +26,4 @@
     </svg>
   </button>
 </label>
+</div>

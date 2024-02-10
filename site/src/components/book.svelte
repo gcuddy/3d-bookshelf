@@ -13,7 +13,9 @@
   export let id: string;
   const { width, height, thickness } = getDimensions(book.dimensions);
 
-  let _width = writable(width);
+  let _width = tweened(width);
+
+  let zIndex = 1;
 
   $: isActive = $activeCard === id;
   $: console.log(`${id} is active: ${isActive}`);
@@ -180,6 +182,13 @@
     } else if (isMouseOver.front && !isActive) {
       $rotateX = round(-(center.x / 2));
       $rotateY = round(center.y / 2);
+    } else if ($spineMode) {
+      $rotateY = 80;
+    }
+
+    if ($spineMode) {
+      zIndex = 100;
+      scale.set(1.13);
     }
 
     springGlare.set({
@@ -327,6 +336,17 @@
   }}
   on:mouseout={() => {
     console.log("mouseout");
+    if ($spineMode) {
+      rotateY.set(90);
+      rotateX.set(0);
+      //   wait for transition to be finished
+      setTimeout(() => {
+        scale.set(1)
+      }, 100)
+      setTimeout(() => {
+        zIndex = 1;
+      }, 500);
+    }
     // isRotating = true;
   }}
   on:pointerdown={(e) => {
@@ -348,6 +368,7 @@
   style:height="{height}px"
   style:perspective="{$selectedCard === id ? 600 * $scale : 600}px"
   style:transform={`translateX(${$translate.x}px) translateY(${$translate.y}px) translateZ(0)`}
+  style:z-index={$spineMode ? zIndex : undefined}
 >
   <!-- style:width={`${width}px`} -->
   <div
