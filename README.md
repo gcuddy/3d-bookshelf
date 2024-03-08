@@ -1,15 +1,6 @@
-# favorite-thiings
+# 3D Books
 
-To install dependencies:
+3D books, using CSS.
 
-```bash
-bun install
-```
+https://github.com/gcuddy/favorite-thiings/assets/24555627/07562e13-9d75-4d40-b1d3-c36a944b7c3a
 
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.0.25. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
