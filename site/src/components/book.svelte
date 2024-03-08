@@ -341,8 +341,8 @@
       rotateX.set(0);
       //   wait for transition to be finished
       setTimeout(() => {
-        scale.set(1)
-      }, 100)
+        scale.set(1);
+      }, 100);
       setTimeout(() => {
         zIndex = 1;
       }, 500);
@@ -395,7 +395,19 @@
       }}
     >
       <slot />
+      {#if $selectedCard === id}
+        <div
+          transition:fade={{
+            delay: 500,
+            duration: 0
+          }}
+          class="h-full scale-x-[-1] w-full absolute grid place-content-center"
+        >
+          <div class="h-48 w-32 bg-white border border-red-400">Due Date</div>
+        </div>
+      {/if}
       <PaperFilter class="opacity-20" />
+
       <div data-glare />
     </div>
     <!-- back side of front (shadow) -->
