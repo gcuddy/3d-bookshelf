@@ -45,7 +45,7 @@ import BookShelf from "../components/bookshelf.astro";
   <BookShelf>
     <BooksControls client:idle />
     <div
-      class="flex flex-wrap min-content gap-4 h-min items-baseline p-14 select-none"
+      class="flex flex-wrap min-content gap-8 h-min items-baseline p-14 justify-center select-none"
     >
       {
         library.map(({ data, id }) => {

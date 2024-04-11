@@ -13,6 +13,7 @@ Toggle Spines
 <style>
 
 button {
+  z-index: 99;
   position: fixed;
   top: 12px;
   right: 16px;

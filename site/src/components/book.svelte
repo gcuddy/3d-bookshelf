@@ -403,7 +403,7 @@
           }}
           class="h-full scale-x-[-1] w-full absolute grid place-content-center"
         >
-          <div class="h-48 w-32 bg-white border border-red-400">Due Date</div>
+          <!-- <div class="h-48 w-32 bg-white border border-red-400">Due Date</div> -->
         </div>
       {/if}
       <PaperFilter class="opacity-20" />
