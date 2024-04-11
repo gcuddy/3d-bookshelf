@@ -3,27 +3,33 @@
 </script>
 
 <div data-view-type={$spineMode ? 'spines' : 'grid'}>
-<label>
-  Spine Mode
-  {$spineMode}
   <button on:click={() => {
     $spineMode = !$spineMode
   }}>
-
-    <svg
-      class="w-6 h-6"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M19 9l-7 7-7-7"
-      ></path>
-    </svg>
+Toggle Spines
   </button>
-</label>
 </div>
+
+<style>
+
+button {
+  position: fixed;
+  top: 12px;
+  right: 16px;
+  background: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.2);
+  font-size: 14px;
+  transition: transform 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+</style>
